@@ -49,6 +49,10 @@ registrationLastRegistration=$(jq -r .registration.last_registration <<< $oasisC
 registrationExpiration=$(jq -r .registration.descriptor.expiration <<< $oasisControlStatus)
 if [[ $registrationExpiration == null ]]; then registrationExpiration=0; fi
 
+runtimeVersionMajor=$(jq -r .registration.descriptor.runtimes[0].version.major <<< $oasisControlStatus)
+runtimeVersionMinor=$(jq -r .registration.descriptor.runtimes[0].version.minor <<< $oasisControlStatus)
+if [[$runtimeVersionMinor == null]]; then runtimeVersionMinor=0; fi
+
 logentry="softwareVersion=\"$softwareVersion\""
 if [[ -n $rosePrice ]]; then
   logentry="$logentry,rosePrice=$rosePrice"
@@ -67,7 +71,7 @@ currentReward=$(bc <<< "scale=2 ; ($selfStake - $initialSelfStake) * $rosePrice"
 logentry="$logentry,peersCount=$peersCount,committeePeersCount=$committeePeersCount,latestHeight=$latestHeight,latestEpoch=$latestEpoch"
 logentry="$logentry,runtimesLatestRound=$runtimesLatestRound,runtimesCommitteeLatestHeight=$runtimesCommitteeLatestHeight,runtimesExecutorRolesCount=$runtimesExecutorRolesCount"
 logentry="$logentry,runtimesStorageRolesCount=$runtimesStorageRolesCount,runtimesStorageLastFinalizedRound=$runtimesStorageLastFinalizedRound"
-logentry="$logentry,registrationLastRegistration=\"$registrationLastRegistration\",registrationExpiration=$registrationExpiration"
+logentry="$logentry,registrationLastRegistration=\"$registrationLastRegistration\",registrationExpiration=$registrationExpiration,runtimeVersionMajor=$runtimeVersionMajor,runtimeVersionMinor=$runtimeVersionMinor"
 logentry="$logentry,isValidator=$isValidator,isValidatorInt=$isValidatorInt,activeStake=$activeStake,selfStake=$selfStake,commissionRate=$commissionRate,currentReward=$currentReward"
 logentry="oasismonitor,entity=$entityPubkey,identityNode=$identityNode $logentry $now"
 echo $logentry
