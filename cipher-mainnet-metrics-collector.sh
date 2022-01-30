@@ -51,7 +51,7 @@ if [[ $registrationExpiration == null ]]; then registrationExpiration=0; fi
 
 runtimeVersionMajor=$(jq -r .registration.descriptor.runtimes[0].version.major <<< $oasisControlStatus)
 runtimeVersionMinor=$(jq -r .registration.descriptor.runtimes[0].version.minor <<< $oasisControlStatus)
-if [[$runtimeVersionMinor == null]]; then runtimeVersionMinor=0; fi
+if [[ $runtimeVersionMinor == null ]]; then runtimeVersionMinor=0; fi
 
 logentry="softwareVersion=\"$softwareVersion\""
 if [[ -n $rosePrice ]]; then
