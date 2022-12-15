@@ -25,7 +25,9 @@ entityPubkey=$(sed -r 's/=/\\=/g' <<< $entityPubkeyRaw)
 if [ -z $identityNodeRaw ]; then identityNodeRaw=$(jq -r .identity.node <<< $oasisControlStatus); fi
 identityNode=$(sed -r 's/=/\\=/g' <<< $identityNodeRaw)
 
-rosePrice=$(curl -s 'https://api.binance.com/api/v3/ticker/price?symbol=ROSEUSDT' | jq -r .price)
+rosePrice=$(curl -s 'https://api.wazirx.com/sapi/v1/tickers/24hr' | jq -r '.[] | select(.symbol == "roseusdt").lastPrice')
+
+#$(curl -s 'https://api.binance.com/api/v3/ticker/price?symbol=ROSEUSDT' | jq -r .price)
 
 softwareVersion=$(jq -r .software_version <<< $oasisControlStatus)
 
